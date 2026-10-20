@@ -1,4 +1,4 @@
-interface AnalyzeUrl {
+export interface AnalyzeUrl {
   isSuspicious: boolean;
   reasons: string[];
 }

@@ -1,12 +1,17 @@
 'use client';
 import { analyzeUrl } from '@/lib/analyzeUrl';
+import Result from '@/components/Result';
 import { inputSchema, InputSchema } from '@/schema/Input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { cn } from 'cn';
-import { Check, Search, Stethoscope } from 'lucide-react';
+import { Stethoscope } from 'lucide-react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 const Main = () => {
+  const [result, setResult] = useState<ReturnType<typeof analyzeUrl> | null>(
+    null
+  );
   const {
     register,
     handleSubmit,
@@ -19,8 +24,7 @@ const Main = () => {
   });
 
   const onSubmit = (data: InputSchema) => {
-    const result = analyzeUrl(data.link);
-    console.log(result);
+    setResult(analyzeUrl(data.link));
   };
   return (
     <div className='w-full flex flex-col gap-3'>
@@ -57,6 +61,9 @@ const Main = () => {
           <span>Periksa</span>
         </button>
       </form>
+      {result && (
+        <Result isSuspicious={result.isSuspicious} reasons={result.reasons} />
+      )}
     </div>
   );
 };
