@@ -1,10 +1,7 @@
 'use client';
 import { type AnalyzeUrl, analyzeUrl } from '@/lib/analyzeUrl';
 import Result from '@/components/Result';
-import {
-  isReputationCheck,
-  type GoogleCheckResult,
-} from '@/lib/reputation';
+import { isReputationCheck, type GoogleCheckResult } from '@/lib/reputation';
 import { inputSchema, InputSchema } from '@/schema/Input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { cn } from 'cn';
@@ -16,11 +13,10 @@ const Main = () => {
   const [checkMode, setCheckMode] = useState<'local' | 'google'>('local');
   const [localResult, setLocalResult] = useState<AnalyzeUrl | null>(null);
   const [isCheckingGoogle, setIsCheckingGoogle] = useState(false);
-  const [googleResult, setGoogleResult] =
-    useState<GoogleCheckResult | null>(null);
-  const [resultOrder, setResultOrder] = useState<
-    ('local' | 'google')[]
-  >([]);
+  const [googleResult, setGoogleResult] = useState<GoogleCheckResult | null>(
+    null
+  );
+  const [resultOrder, setResultOrder] = useState<('local' | 'google')[]>([]);
 
   const {
     register,
@@ -126,8 +122,7 @@ const Main = () => {
                 Pemeriksaan lokal (tanpa API)
               </span>
               <span className='block text-xs text-gray-600'>
-                Cepat. Memeriksa pola pada alamat saja; tidak menghubungi
-                Google.
+                Cepat. Memeriksa pola pada alamat saja.
               </span>
             </span>
           </label>
@@ -153,8 +148,7 @@ const Main = () => {
               </span>
               <span className='block text-xs text-gray-600'>
                 Mencocokkan ancaman dengan Google Safe Browsing dan mengecek
-                usia domain melalui RDAP. URL/domain dikirim ke layanan tersebut;
-                perlu API key Google.
+                usia domain melalui RDAP.
               </span>
             </span>
           </label>
