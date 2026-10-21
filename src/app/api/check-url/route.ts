@@ -1,5 +1,5 @@
-import { ReputationCheck } from '@/lib/reputation';
-import { inputSchema, InputSchema } from '@/schema/Input';
+import { type ReputationCheck } from '../../../lib/reputation';
+import { inputSchema, InputSchema } from '../../../schema/Input';
 import { isIP } from 'node:net';
 
 type Body = InputSchema;
@@ -253,17 +253,42 @@ export async function POST(request: Request) {
   const parsedUrl = new URL(result.data.link);
   const hostname = parsedUrl.hostname.toLowerCase();
   const apiKey = process.env.SAFE_BROWSING_API_KEY;
+  const safeBrowsingApiUrl = process.env.SAFE_BROWSING_API_URL;
   let googleChecks: ReputationCheck[];
 
-  if (!apiKey) {
+  if (!apiKey || !safeBrowsingApiUrl) {
     googleChecks = makeGoogleChecks(
       [],
-      'SAFE_BROWSING_API_KEY belum dikonfigurasi.'
+      'SAFE_BROWSING_API_KEY atau SAFE_BROWSING_API_URL belum dikonfigurasi.'
     );
   } else {
-    const googleUrl = new URL(
-      'https://safebrowsing.googleapis.com/v4/threatMatches:find'
-    );
+    let googleUrl: URL;
+    try {
+      googleUrl = new URL(safeBrowsingApiUrl);
+      if (
+        googleUrl.protocol !== 'https:' ||
+        googleUrl.hostname !== 'safebrowsing.googleapis.com'
+      ) {
+        throw new Error('Endpoint Safe Browsing harus memakai host Google HTTPS.');
+      }
+    } catch (error) {
+      console.error(
+        'Invalid SAFE_BROWSING_API_URL:',
+        error instanceof Error ? error.message : 'Invalid URL'
+      );
+      googleChecks = makeGoogleChecks(
+        [],
+        'SAFE_BROWSING_API_URL tidak valid.'
+      );
+      const domainAgeCheck = await checkDomainAge(hostname);
+      return Response.json({
+        receivedUrl: result.data.link,
+        checks: [...googleChecks, domainAgeCheck].sort(
+          (left, right) => left.indicator - right.indicator
+        ),
+      });
+    }
+
     googleUrl.searchParams.set('key', apiKey);
 
     try {
