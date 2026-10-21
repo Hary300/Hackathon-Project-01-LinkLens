@@ -1,5 +1,5 @@
 'use client';
-import { analyzeUrl } from '@/lib/analyzeUrl';
+import { type AnalyzeUrl, analyzeUrl } from '@/lib/analyzeUrl';
 import Result from '@/components/Result';
 import { inputSchema, InputSchema } from '@/schema/Input';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,9 +9,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 const Main = () => {
-  const [result, setResult] = useState<ReturnType<typeof analyzeUrl> | null>(
-    null
-  );
+  const [result, setResult] = useState<AnalyzeUrl | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -26,6 +25,7 @@ const Main = () => {
   const onSubmit = (data: InputSchema) => {
     setResult(analyzeUrl(data.link));
   };
+
   return (
     <div className='w-full flex flex-col gap-3'>
       <p
@@ -38,7 +38,7 @@ const Main = () => {
       <form
         onSubmit={handleSubmit(onSubmit)}
         noValidate
-        className='flex justify-between gap-2 p-1  rounded-full shadow-[0_0_5px_rgba(0,0,0,0.2)]'
+        className='flex justify-between gap-2 p-1 rounded-full shadow-[0_0_5px_rgba(0,0,0,0.2)]'
       >
         <input
           type='url'
@@ -49,7 +49,7 @@ const Main = () => {
             errors.link && 'border border-red-500'
           )}
           placeholder='Masukan link'
-          {...register('link')}
+          {...register('link', { onChange: () => setResult(null) })}
         />
         <button
           type='submit'
@@ -62,7 +62,7 @@ const Main = () => {
         </button>
       </form>
       {result && (
-        <Result isSuspicious={result.isSuspicious} reasons={result.reasons} />
+        <Result isSuspicious={result.isSuspicious} checks={result.checks} />
       )}
     </div>
   );
