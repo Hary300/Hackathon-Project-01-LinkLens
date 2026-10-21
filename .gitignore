@@ -42,3 +42,6 @@ next-env.d.ts
 
 # Local link safety checklist
 /LINK_CHECKLIST.md
+
+# Local test files
+*.test.ts
