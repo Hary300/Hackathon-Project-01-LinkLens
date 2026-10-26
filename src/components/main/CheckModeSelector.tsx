@@ -15,6 +15,7 @@ const CheckModeSelector = ({
   return (
     <fieldset id='selector' className='space-y-2' disabled={isCheckingGoogle}>
       <legend className='text-sm font-semibold'>Pilih cara pemeriksaan</legend>
+
       <div className='grid gap-2 grid-cols-1 md:grid-cols-2'>
         {/* Pemeriksaan Lokal */}
         <label
