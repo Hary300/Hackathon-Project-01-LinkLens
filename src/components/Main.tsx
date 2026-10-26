@@ -10,12 +10,15 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 const Main = () => {
+  // pilihan pemeriksaan state
   const [checkMode, setCheckMode] = useState<'local' | 'google'>('local');
-  const [localResult, setLocalResult] = useState<AnalyzeUrl | null>(null);
   const [isCheckingGoogle, setIsCheckingGoogle] = useState(false);
+
+  // result state
   const [googleResult, setGoogleResult] = useState<GoogleCheckResult | null>(
     null
   );
+  const [localResult, setLocalResult] = useState<AnalyzeUrl | null>(null);
   const [resultOrder, setResultOrder] = useState<('local' | 'google')[]>([]);
 
   const {
@@ -100,10 +103,11 @@ const Main = () => {
         <legend className='text-sm font-semibold'>
           Pilih cara pemeriksaan
         </legend>
-        <div className='grid gap-2 sm:grid-cols-2'>
+        <div className='grid gap-2 grid-cols-1 md:grid-cols-2'>
+          {/* Pemeriksaan Lokal */}
           <label
             className={cn(
-              'flex cursor-pointer gap-3 rounded-xl border p-3 transition-colors',
+              'flex cursor-pointer gap-3 rounded-xl border p-3 transition-colors items-center',
               checkMode === 'local'
                 ? 'border-blue-300 bg-blue-50'
                 : 'border-gray-200 hover:bg-gray-50'
@@ -115,7 +119,7 @@ const Main = () => {
               value='local'
               checked={checkMode === 'local'}
               onChange={() => handleCheckModeChange('local')}
-              className='mt-1 accent-blue-600'
+              className='accent-blue-600'
             />
             <span>
               <span className='block text-sm font-semibold'>
@@ -126,9 +130,11 @@ const Main = () => {
               </span>
             </span>
           </label>
+
+          {/* Pemeriksaan Google Safe */}
           <label
             className={cn(
-              'flex cursor-pointer gap-3 rounded-xl border p-3 transition-colors',
+              'flex cursor-pointer gap-3 rounded-xl border p-3 transition-colors items-center',
               checkMode === 'google'
                 ? 'border-blue-300 bg-blue-50'
                 : 'border-gray-200 hover:bg-gray-50'
@@ -140,7 +146,7 @@ const Main = () => {
               value='google'
               checked={checkMode === 'google'}
               onChange={() => handleCheckModeChange('google')}
-              className='mt-1 accent-blue-600'
+              className='accent-blue-600'
             />
             <span>
               <span className='block text-sm font-semibold'>
@@ -154,6 +160,7 @@ const Main = () => {
           </label>
         </div>
       </fieldset>
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         noValidate
@@ -222,6 +229,8 @@ const Main = () => {
           )}
         </p>
       </form>
+
+      {/* result */}
       {resultOrder.length > 0 && (
         <Result
           localResult={localResult}
