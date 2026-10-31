@@ -60,9 +60,33 @@ const checks = [
   checkExternalRedirect,
 ];
 
+/**
+ * Menjalankan setiap pemeriksaan dengan konteks URL yang sama.
+ * Pemeriksaan yang menemukan indikator mengembalikan objek `AnalyzeUrlCheck`,
+ * sedangkan yang tidak menemukan indikator mengembalikan `null`. Hasil `null`
+ * dibuang dan urutan temuan mengikuti urutan fungsi di atas.
+ *
+ * Contoh hasil:
+ * [
+ *   {
+ *     header: 'Koneksi menggunakan HTTP, bukan HTTPS',
+ *     description: 'Koneksi HTTP tidak mengenkripsi data saat dikirim.',
+ *   },
+ * ]
+ */
 export const runUrlChecks = (
   context: UrlAnalysisContext
-): AnalyzeUrlCheck[] =>
-  checks
-    .map((check) => check(context))
-    .filter((check): check is AnalyzeUrlCheck => check !== null);
+): AnalyzeUrlCheck[] => {
+  // map menjalankan setiap fungsi pemeriksaan dan menghasilkan satu nilai
+  // untuk tiap fungsi: objek temuan jika cocok, atau null jika tidak cocok.
+  // Contoh hasil map: [null, { header: '...', description: '...' }, null].
+  const checkResults = checks.map((check) => check(context));
+
+  // filter membuang nilai null, sehingga array akhir hanya berisi temuan.
+  // Contoh hasil filter: [{ header: '...', description: '...' }].
+  // `check is AnalyzeUrlCheck` adalah type predicate TypeScript: setelah kondisi
+  // `check !== null` benar, TypeScript mengetahui bahwa nilainya AnalyzeUrlCheck.
+  return checkResults.filter(
+    (check): check is AnalyzeUrlCheck => check !== null
+  );
+};

@@ -1,3 +1,4 @@
+// Daftar domain resmi untuk membandingkan hostname pada pemeriksaan 7 dan 8.
 const knownBrandDomains: Record<string, string> = {
   amazon: 'amazon.com',
   apple: 'apple.com',
@@ -14,6 +15,8 @@ const knownBrandDomains: Record<string, string> = {
   whatsapp: 'whatsapp.com',
 };
 
+// Suffix multi-label agar pemeriksaan 8 mengambil label domain yang tepat,
+// misalnya "example" dari "shop.example.co.id".
 const multiPartPublicSuffixes = new Set([
   'co.id',
   'com.au',
@@ -25,6 +28,7 @@ const multiPartPublicSuffixes = new Set([
   'or.id',
 ]);
 
+// Domain pemendek URL yang diperiksa oleh pemeriksaan 18.
 export const shortenerDomains = new Set([
   'bit.ly',
   'cutt.ly',
@@ -37,6 +41,7 @@ export const shortenerDomains = new Set([
   't.co',
 ]);
 
+// Nama query yang berpotensi menentukan tujuan redirect pada pemeriksaan 19 dan 20.
 const redirectParameterNames = new Set([
   'dest',
   'destination',
@@ -50,12 +55,16 @@ const redirectParameterNames = new Set([
   'url',
 ]);
 
+// Mengambil label domain yang dapat dibandingkan dengan nama brand;
+// dipakai oleh pemeriksaan 8 melalui konteks analisis URL.
 export const getRegistrableDomainLabel = (hostname: string) => {
   const labels = hostname.split('.');
   const suffix = labels.slice(-2).join('.');
   return labels[multiPartPublicSuffixes.has(suffix) ? -3 : -2] ?? labels[0];
 };
 
+// Mengubah beberapa karakter yang umum dipakai untuk meniru huruf brand;
+// dipakai oleh findSimilarBrand untuk pemeriksaan 8.
 export const normalizeLookalikeCharacters = (value: string) =>
   value
     .replace(/0/g, 'o')
@@ -63,6 +72,8 @@ export const normalizeLookalikeCharacters = (value: string) =>
     .replace(/3/g, 'e')
     .replace(/5/g, 's');
 
+// Memeriksa apakah dua nama berbeda tepat satu karakter, termasuk satu
+// karakter yang ditambah atau dihilangkan; dipakai pemeriksaan 8.
 export const hasOneCharacterDifference = (left: string, right: string) => {
   if (Math.abs(left.length - right.length) > 1) return false;
 
@@ -92,16 +103,22 @@ export const hasOneCharacterDifference = (left: string, right: string) => {
   return differences === 1;
 };
 
+// Mengambil semua parameter query yang namanya dikenal sebagai parameter
+// redirect; dipakai bersama oleh pemeriksaan 19 dan 20.
 export const getRedirectParameters = (url: URL) =>
   [...url.searchParams.entries()].filter(([name]) =>
     redirectParameterNames.has(name.toLowerCase())
   );
 
+// Mendeteksi nama domain resmi yang muncul sebelum label domain lain;
+// dipakai oleh pemeriksaan 7.
 export const findMisleadingBrandDomain = (hostname: string) =>
   Object.entries(knownBrandDomains).find(([, brandDomain]) =>
     hostname.includes(`${brandDomain}.`)
   );
 
+// Mencari label domain yang sama atau hampir sama dengan brand yang dikenal;
+// dipakai oleh pemeriksaan 8.
 export const findSimilarBrand = (registrableDomainLabel: string) => {
   const normalizedLabel = normalizeLookalikeCharacters(registrableDomainLabel);
 
@@ -113,4 +130,5 @@ export const findSimilarBrand = (registrableDomainLabel: string) => {
   );
 };
 
+// Mengambil domain resmi untuk menjelaskan temuan pemeriksaan 7.
 export const getKnownBrandDomain = (brand: string) => knownBrandDomains[brand];
