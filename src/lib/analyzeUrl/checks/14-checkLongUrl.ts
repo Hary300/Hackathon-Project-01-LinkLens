@@ -6,7 +6,7 @@ export const checkLongUrl = ({
   if (parsedUrl.href.length <= 2000) return null;
 
   return {
-    header: 'Alamat tautan sangat panjang',
-    description: `Tautan ini memiliki ${parsedUrl.href.length} karakter sehingga nama situs dan tujuan akhirnya sulit dilihat. Periksa nama situs di awal dan pastikan halaman yang dituju sesuai sebelum dibuka.`,
+    header: 'Apakah alamat tautan ini sangat panjang?',
+    description: `Ya. Tautan ini memiliki ${parsedUrl.href.length} karakter, sehingga nama situs dan tujuan akhirnya lebih sulit diperiksa.`,
   };
 };

@@ -13,7 +13,7 @@ export const checkMisleadingBrandSubdomain = ({
   const [brand] = misleadingBrandDomain;
 
   return {
-    header: 'Nama layanan hanya muncul di bagian depan alamat',
-    description: `Alamat memuat "${getKnownBrandDomain(brand)}" di bagian depan, tetapi nama situs sebenarnya berada setelahnya. Pastikan nama situs paling akhir cocok dengan alamat resmi layanan tersebut.`,
+    header: 'Apakah nama layanan hanya muncul di bagian depan alamat?',
+    description: `Ya. "${getKnownBrandDomain(brand)}" hanya muncul di bagian depan alamat; nama situs sebenarnya berada setelahnya. Jadi, alamat ini belum tentu milik layanan tersebut.`,
   };
 };

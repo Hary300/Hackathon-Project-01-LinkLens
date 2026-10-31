@@ -12,8 +12,8 @@ export const checkPhishingTerms = ({
   }
 
   return {
-    header: 'Alamat mengarah ke halaman masuk atau pembayaran',
+    header: 'Apakah alamat ini mengarah ke halaman masuk atau pembayaran?',
     description:
-      'Halaman ini mungkin meminta kata sandi, data akun, atau pembayaran. Pastikan nama situs benar-benar milik layanan yang kamu tuju sebelum mengisi apa pun.',
+      'Ya. Alamat ini memuat kata yang biasanya ada di halaman masuk atau pembayaran. Halaman seperti ini dapat meminta kata sandi atau data keuangan.',
   };
 };

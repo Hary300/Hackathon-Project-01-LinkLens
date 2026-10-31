@@ -8,8 +8,8 @@ export const checkExecutablePath = ({
   }
 
   return {
-    header: 'Tautan mengarah ke berkas aplikasi',
+    header: 'Apakah tautan ini mengarah ke berkas aplikasi?',
     description:
-      'Berkas aplikasi dapat mengubah perangkat saat dibuka. Unduh hanya dari situs resmi dan pastikan kamu mengenali pembuat berkasnya.',
+      'Ya. Tautan ini menuju berkas aplikasi yang bisa mengubah perangkat saat dibuka. Berkas dari sumber yang salah dapat membahayakan perangkat atau data.',
   };
 };

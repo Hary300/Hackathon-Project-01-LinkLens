@@ -6,41 +6,6 @@ interface LocalResultProps {
   localResult: AnalyzeUrl;
 }
 
-const checkQuestions: Record<string, string> = {
-  'Alamat situs hanya berupa angka': 'Apakah alamat situs ini hanya berupa angka?',
-  'Alamat memakai tanda @': 'Apakah alamat ini memakai tanda @?',
-  'Alamat situs punya banyak bagian': 'Apakah alamat situs ini punya banyak bagian?',
-  'Nama situs sangat panjang': 'Apakah nama situs ini sangat panjang?',
-  'Nama situs memakai banyak angka atau tanda hubung':
-    'Apakah nama situs ini memakai banyak angka atau tanda hubung?',
-  'Nama situs memakai huruf khusus': 'Apakah nama situs ini memakai huruf khusus?',
-  'Nama layanan hanya muncul di bagian depan alamat':
-    'Apakah nama layanan hanya muncul di bagian depan alamat?',
-  'Nama situs mirip dengan nama layanan terkenal':
-    'Apakah nama situs ini mirip dengan nama layanan terkenal?',
-  'Koneksi ke situs ini tidak terlindungi':
-    'Apakah koneksi ke situs ini tidak terlindungi?',
-  'Alamat memakai nomor tambahan yang tidak biasa':
-    'Apakah alamat ini memakai nomor tambahan yang tidak biasa?',
-  'Tautan ini bukan alamat situs biasa':
-    'Apakah tautan ini dibuka oleh aplikasi, bukan halaman internet biasa?',
-  'Alamat mengarah ke halaman masuk atau pembayaran':
-    'Apakah alamat ini mengarah ke halaman masuk atau pembayaran?',
-  'Alamat tautan memuat banyak informasi tambahan':
-    'Apakah alamat ini memuat banyak informasi tambahan?',
-  'Alamat tautan sangat panjang': 'Apakah alamat tautan ini sangat panjang?',
-  'Sebagian alamat sulit dibaca': 'Apakah ada bagian alamat yang sulit dibaca?',
-  'Tautan mengarah ke berkas aplikasi':
-    'Apakah tautan ini mengarah ke berkas aplikasi?',
-  'Alamat memuat tulisan sebelum tanda @':
-    'Apakah alamat ini memuat tulisan sebelum tanda @?',
-  'Alamat tautan dipendekkan': 'Apakah alamat tautan ini dipendekkan?',
-  'Tautan dapat membawa kamu ke halaman lain':
-    'Apakah tautan ini bisa membawa kamu ke halaman lain?',
-  'Tautan mengarah ke situs yang berbeda':
-    'Apakah tautan ini mengarah ke situs yang berbeda?',
-};
-
 const LocalResult = ({ localResult }: LocalResultProps) => {
   const { isSuspicious, checks } = localResult ?? {
     isSuspicious: false,
@@ -107,7 +72,7 @@ const LocalResult = ({ localResult }: LocalResultProps) => {
             <div key={header}>
               <h3 className='font-semibold'>
                 {String(index + 1).padStart(2, '0')}.{' '}
-                {checkQuestions[header] ?? `${header}?`}
+                {header}
               </h3>
               <p>{description}</p>
             </div>

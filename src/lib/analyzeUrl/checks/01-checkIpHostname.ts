@@ -7,8 +7,8 @@ export const checkIpHostname = ({
   if (!isIpv4 && !isIpv6) return null;
 
   return {
-    header: 'Alamat situs hanya berupa angka',
+    header: 'Apakah alamat situs ini hanya berupa angka?',
     description:
-      'Alamat situs hanya berupa angka, jadi sulit mengetahui siapa pemiliknya. Pastikan tautan ini berasal dari layanan resmi sebelum dibuka atau diisi.',
+      'Ya. Alamat ini memakai angka, bukan nama situs yang biasa dikenali. Karena itu, pemiliknya lebih sulit diketahui.',
   };
 };

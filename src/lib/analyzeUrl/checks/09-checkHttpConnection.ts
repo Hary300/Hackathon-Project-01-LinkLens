@@ -6,8 +6,8 @@ export const checkHttpConnection = ({
   if (parsedUrl.protocol !== 'http:') return null;
 
   return {
-    header: 'Koneksi ke situs ini tidak terlindungi',
+    header: 'Apakah koneksi ke situs ini tidak terlindungi?',
     description:
-      'Kata sandi atau informasi pembayaran yang dikirim lewat koneksi ini bisa dilihat orang lain. Jangan isi data apa pun; cari alamat resmi layanan dan buka dari sana.',
+      'Ya. Alamat situs ini memakai http://, sehingga data tidak disamarkan saat dikirim. Orang lain yang dapat mengintip koneksi internet yang sama bisa membaca kata sandi atau informasi pembayaran.',
   };
 };

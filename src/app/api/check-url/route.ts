@@ -80,8 +80,8 @@ const makeGoogleChecks = (
       indicator: 21,
       status: hasPhishing ? 'found' : 'clear',
       description: hasPhishing
-        ? 'Tautan ini pernah ditandai karena digunakan untuk menipu orang agar memberikan informasi pribadi.'
-        : 'Belum ditemukan laporan bahwa tautan ini digunakan untuk mencuri informasi pribadi.',
+        ? 'Ya. Tautan ini pernah ditandai karena digunakan untuk menipu orang agar memberikan informasi pribadi.'
+        : 'Belum ditemukan laporan bahwa tautan ini dipakai untuk menipu orang. Artinya, belum ada kecocokan pada daftar yang diperiksa.',
       source: 'Google Safe Browsing',
     },
     // 22. URL terdeteksi mengandung malware
@@ -89,8 +89,8 @@ const makeGoogleChecks = (
       indicator: 22,
       status: hasMalware ? 'found' : 'clear',
       description: hasMalware
-        ? 'Tautan ini pernah dikaitkan dengan program yang dapat merusak perangkat atau mengambil data.'
-        : 'Belum ditemukan laporan bahwa tautan ini membawa program yang merusak perangkat.',
+        ? 'Ya. Tautan ini pernah dikaitkan dengan program yang dapat merusak perangkat atau mengambil data.'
+        : 'Belum ditemukan laporan bahwa tautan ini membawa program berbahaya. Artinya, belum ada kecocokan pada daftar yang diperiksa.',
       source: 'Google Safe Browsing',
     },
     // 23. Domain memiliki reputasi buruk
@@ -98,8 +98,8 @@ const makeGoogleChecks = (
       indicator: 23,
       status: hasReputationMatch ? 'found' : 'clear',
       description: hasReputationMatch
-        ? 'Ada laporan berbahaya yang cocok dengan alamat atau nama situs ini.'
-        : 'Belum ditemukan laporan berbahaya yang cocok dengan alamat atau nama situs ini.',
+        ? 'Ya. Ada laporan berbahaya yang cocok dengan alamat atau nama situs ini.'
+        : 'Belum ditemukan laporan berbahaya yang cocok dengan alamat atau nama situs ini. Artinya, belum ada kecocokan pada daftar yang diperiksa.',
       source: 'Google',
     },
     // 25. Domain atau URL pernah dilaporkan
@@ -107,8 +107,8 @@ const makeGoogleChecks = (
       indicator: 25,
       status: hasReport ? 'found' : 'clear',
       description: hasReport
-        ? 'Alamat ini pernah dilaporkan ke Google sebagai berbahaya.'
-        : 'Belum ditemukan laporan tentang alamat ini.',
+        ? 'Ya. Alamat ini pernah dilaporkan ke Google karena berbahaya.'
+        : 'Belum ditemukan laporan tentang alamat ini pada daftar yang diperiksa.',
       source: 'Google',
     },
   ];
@@ -122,6 +122,52 @@ const isSafeBrowsingMatch = (value: unknown): value is SafeBrowsingMatch =>
     (typeof value.threat === 'object' &&
       value.threat !== null &&
       (!('url' in value.threat) || typeof value.threat.url === 'string')));
+
+const isStringArray = (value: unknown): value is string[] =>
+  Array.isArray(value) && value.every((item) => typeof item === 'string');
+
+const getRdapEndpoint = async (topLevelDomain: string): Promise<string> => {
+  const response = await fetch('https://data.iana.org/rdap/dns.json', {
+    signal: AbortSignal.timeout(8_000),
+    cache: 'no-store',
+    headers: { Accept: 'application/json' },
+  });
+  if (!response.ok) {
+    throw new Error(`RDAP bootstrap request failed (HTTP ${response.status})`);
+  }
+
+  const data: unknown = await response.json();
+  const services =
+    typeof data === 'object' &&
+    data !== null &&
+    'services' in data &&
+    Array.isArray(data.services)
+      ? data.services
+      : [];
+  const matchingService = services.find(
+    (service): service is [string[], string[]] =>
+      Array.isArray(service) &&
+      service.length === 2 &&
+      isStringArray(service[0]) &&
+      service[0].some(
+        (suffix) => suffix.toLowerCase() === topLevelDomain
+      ) &&
+      isStringArray(service[1])
+  );
+  const endpoint = matchingService?.[1].find((url) => {
+    try {
+      return new URL(url).protocol === 'https:';
+    } catch {
+      return false;
+    }
+  });
+
+  if (!endpoint) {
+    throw new Error(`No secure RDAP service found for .${topLevelDomain}`);
+  }
+
+  return endpoint;
+};
 
 // 24. Domain baru terdaftar
 const checkDomainAge = async (hostname: string): Promise<ReputationCheck> => {
@@ -137,8 +183,17 @@ const checkDomainAge = async (hostname: string): Promise<ReputationCheck> => {
   }
 
   try {
+    const topLevelDomain = domain.split('.').at(-1);
+    if (!topLevelDomain) {
+      throw new Error('Could not determine the domain ending');
+    }
+    const endpoint = await getRdapEndpoint(topLevelDomain);
+    const rdapUrl = new URL(
+      `domain/${encodeURIComponent(domain)}`,
+      `${endpoint.replace(/\/+$/, '')}/`
+    );
     const response = await fetch(
-      `https://rdap.org/domain/${encodeURIComponent(domain)}`,
+      rdapUrl,
       {
         signal: AbortSignal.timeout(8_000),
         cache: 'no-store',
@@ -208,8 +263,8 @@ const checkDomainAge = async (hostname: string): Promise<ReputationCheck> => {
       indicator: 24,
       status: isNewDomain ? 'found' : 'clear',
       description: isNewDomain
-        ? `Nama situs ini dibuat sekitar ${ageInDays} hari yang lalu. Pastikan alamatnya diumumkan oleh layanan resmi sebelum dibuka atau diisi.`
-        : `Nama situs ini dibuat sekitar ${ageInDays} hari yang lalu. Pastikan alamat dan halaman yang dituju sesuai dengan layanan resmi.`,
+        ? `Ya. Nama situs ini baru dibuat, sekitar ${ageInDays} hari yang lalu. Nama yang baru dibuat belum memiliki banyak riwayat yang bisa diperiksa.`
+        : `Tidak. Nama situs ini dibuat sekitar ${ageInDays} hari yang lalu, jadi tidak tergolong baru. Usia ini menjadi petunjuk tentang lamanya nama situs digunakan.`,
       source: 'Data pendaftaran nama situs',
     };
   } catch (error) {

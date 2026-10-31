@@ -6,8 +6,8 @@ export const checkUnsupportedProtocol = (
   if (['http:', 'https:'].includes(parsedUrl.protocol)) return null;
 
   return {
-    header: 'Tautan ini bukan alamat situs biasa',
+    header: 'Apakah tautan ini dibuka oleh aplikasi, bukan halaman internet biasa?',
     description:
-      'Tautan ini mungkin dibuka oleh aplikasi, bukan halaman internet biasa. Jangan lanjutkan jika kamu tidak mengenali pengirim atau aplikasi yang akan membukanya.',
+      'Ya. Tautan ini bukan alamat halaman internet biasa dan mungkin membuka aplikasi lain. Karena itu, pastikan kamu mengenali pengirim dan aplikasi yang terbuka.',
   };
 };

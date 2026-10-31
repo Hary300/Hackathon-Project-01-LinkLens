@@ -6,7 +6,7 @@ export const checkLongHostname = ({
   if (hostname.length <= 50) return null;
 
   return {
-    header: 'Nama situs sangat panjang',
-    description: `Nama situs ini memiliki ${hostname.length} huruf dan angka sehingga nama aslinya sulit dikenali. Periksa ejaannya dengan teliti dan cocokkan dengan alamat resmi.`,
+    header: 'Apakah nama situs ini sangat panjang?',
+    description: `Ya. Nama situs ini memiliki ${hostname.length} huruf dan angka, sehingga lebih sulit dibaca dan bisa menyerupai nama situs lain.`,
   };
 };

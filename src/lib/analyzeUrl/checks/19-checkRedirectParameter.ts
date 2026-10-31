@@ -8,7 +8,7 @@ export const checkRedirectParameter = ({
   if (redirectParameters.length === 0) return null;
 
   return {
-    header: 'Tautan dapat membawa kamu ke halaman lain',
-    description: `Ada petunjuk di dalam tautan yang dapat membuka halaman lain (${redirectParameters.map(([name]) => name).join(', ')}). Pastikan halaman tujuan berasal dari layanan resmi sebelum dibuka.`,
+    header: 'Apakah tautan ini bisa membawa kamu ke halaman lain?',
+    description: `Ya. Tautan memuat petunjuk untuk membuka halaman lain (${redirectParameters.map(([name]) => name).join(', ')}). Jadi, tujuan akhirnya bisa berbeda dari halaman yang terlihat sekarang.`,
   };
 };

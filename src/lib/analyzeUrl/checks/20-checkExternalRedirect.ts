@@ -23,7 +23,7 @@ export const checkExternalRedirect = ({
   if (!externalRedirectTarget) return null;
 
   return {
-    header: 'Tautan mengarah ke situs yang berbeda',
-    description: `Tautan ini bisa membawa kamu dari "${hostname}" ke "${externalRedirectTarget.hostname}". Pastikan situs tujuan memang milik layanan resmi sebelum masuk akun atau mengisi data.`,
+    header: 'Apakah tautan ini mengarah ke situs yang berbeda?',
+    description: `Ya. Tautan ini membawa kamu dari "${hostname}" ke "${externalRedirectTarget.hostname}". Situs tujuan berbeda dari situs awal, jadi pastikan kamu mengenalinya sebelum mengisi data.`,
   };
 };

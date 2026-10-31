@@ -23,7 +23,13 @@ const ReputationCheckItem = ({ check }: { check: ReputationCheck }) => {
           }[check.status];
   const recommendation =
     check.status === 'unavailable'
-      ? 'Pemeriksaan ini belum memberi hasil. Coba lagi nanti dan pastikan tautan berasal dari layanan resmi sebelum dibuka atau diisi.'
+      ? {
+          21: 'Google belum bisa memeriksa laporan tentang tautan ini. Coba lagi nanti sebelum memasukkan kata sandi atau kode verifikasi.',
+          22: 'Google belum bisa memeriksa apakah tautan ini membawa program berbahaya. Jangan unduh berkas sebelum memastikannya.',
+          23: 'Google belum bisa memeriksa laporan tentang situs ini. Pastikan nama situs melalui layanan resminya sebelum melanjutkan.',
+          24: 'Informasi waktu pembuatan nama situs belum tersedia. Pastikan alamatnya melalui layanan resmi sebelum mengisi data.',
+          25: 'Google belum bisa memeriksa laporan tentang tautan ini. Pastikan tautan berasal dari layanan resmi sebelum membukanya.',
+        }[check.indicator]
       : check.status === 'found'
         ? {
             21: 'Tautan ini pernah dipakai untuk menipu orang agar memberikan kata sandi atau kode verifikasi. Jangan isi data; buka layanan lewat alamat resmi yang kamu ketik sendiri.',
@@ -44,7 +50,13 @@ const ReputationCheckItem = ({ check }: { check: ReputationCheck }) => {
     : 'Google';
   const description =
     check.status === 'unavailable'
-      ? 'Informasi ini belum bisa diperiksa. Coba lagi nanti.'
+      ? {
+          21: 'Belum bisa dijawab karena Google belum berhasil memeriksa apakah tautan ini pernah dipakai untuk menipu orang.',
+          22: 'Belum bisa dijawab karena Google belum berhasil memeriksa apakah tautan ini terkait program berbahaya.',
+          23: 'Belum bisa dijawab karena Google belum berhasil memeriksa laporan tentang situs ini.',
+          24: 'Belum bisa dijawab karena informasi waktu pembuatan nama situs tidak tersedia.',
+          25: 'Belum bisa dijawab karena Google belum berhasil memeriksa laporan tentang tautan ini.',
+        }[check.indicator]
       : check.description;
 
   return (

@@ -15,7 +15,7 @@ export const checkNestedSubdomain = ({
   }
 
   return {
-    header: 'Alamat situs punya banyak bagian',
-    description: `Alamat situs ini memiliki ${hostnameParts.length} bagian${hasSensitiveSubdomain ? ' dan ada kata yang menyerupai halaman masuk atau verifikasi' : ''}. Nama situs sebenarnya bisa sulit dikenali; cocokkan dengan alamat resmi sebelum masuk akun.`,
+    header: 'Apakah alamat situs ini punya banyak bagian?',
+    description: `Ya. Alamat ini memiliki ${hostnameParts.length} bagian${hasSensitiveSubdomain ? ' dan memuat kata yang menyerupai halaman masuk atau verifikasi' : ''}. Banyak bagian membuat nama situs sebenarnya lebih sulit dikenali.`,
   };
 };

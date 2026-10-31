@@ -8,7 +8,7 @@ export const checkEncodedPath = ({
   if (encodedSequences.length < 3 && !hasEncodedUrlSeparators) return null;
 
   return {
-    header: 'Sebagian alamat sulit dibaca',
-    description: `Ada ${encodedSequences.length} bagian alamat yang ditulis dengan kode${hasEncodedUrlSeparators ? ' dan dapat menyamarkan pemisah alamat' : ''}. Karena tujuan tautan jadi sulit dikenali, pastikan nama situs dan halaman akhirnya sesuai dengan layanan resmi.`,
+    header: 'Apakah ada bagian alamat yang sulit dibaca?',
+    description: `Ya. Ada ${encodedSequences.length} bagian alamat yang ditulis dengan kode${hasEncodedUrlSeparators ? ' termasuk kode yang menyamarkan pemisah alamat' : ''}. Akibatnya, isi dan tujuan tautan lebih sulit dibaca.`,
   };
 };

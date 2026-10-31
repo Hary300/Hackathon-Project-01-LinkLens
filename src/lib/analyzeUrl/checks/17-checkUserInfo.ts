@@ -6,8 +6,8 @@ export const checkUserInfo = ({
   if (!parsedUrl.username && !parsedUrl.password) return null;
 
   return {
-    header: 'Alamat memuat tulisan sebelum tanda @',
+    header: 'Apakah alamat ini memuat tulisan sebelum tanda @?',
     description:
-      'Tulisan sebelum tanda @ bisa membuat nama situs sebenarnya sulit terlihat dan mungkin berisi informasi akun. Periksa nama situs setelah tanda @ dan jangan bagikan tautan ini.',
+      'Ya. Tulisan sebelum tanda @ bisa mengalihkan perhatian dari nama situs sebenarnya atau berisi informasi akun. Nama situs tujuan ada setelah tanda @.',
   };
 };

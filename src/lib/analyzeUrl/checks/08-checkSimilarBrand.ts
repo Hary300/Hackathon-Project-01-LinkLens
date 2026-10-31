@@ -8,7 +8,7 @@ export const checkSimilarBrand = ({
   if (!similarBrand) return null;
 
   return {
-    header: 'Nama situs mirip dengan nama layanan terkenal',
-    description: `Nama situs "${registrableDomainLabel}" mirip dengan "${similarBrand}". Perbedaan satu huruf atau angka mudah terlewat; periksa ejaannya dan cocokkan dengan alamat resmi.`,
+    header: 'Apakah nama situs ini mirip dengan nama layanan terkenal?',
+    description: `Ya. Nama situs "${registrableDomainLabel}" mirip dengan "${similarBrand}". Perbedaan kecil seperti satu huruf atau angka mudah terlewat saat dibaca.`,
   };
 };

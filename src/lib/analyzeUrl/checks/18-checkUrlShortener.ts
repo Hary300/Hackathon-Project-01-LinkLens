@@ -8,8 +8,8 @@ export const checkUrlShortener = ({
   if (!shortenerDomains.has(normalizedHostname)) return null;
 
   return {
-    header: 'Alamat tautan dipendekkan',
+    header: 'Apakah alamat tautan ini dipendekkan?',
     description:
-      'Tautan pendek menyembunyikan nama situs yang akan dibuka. Pastikan pengirimnya tepercaya dan cari tahu alamat lengkapnya sebelum melanjutkan.',
+      'Ya. Tautan pendek menyembunyikan nama situs tujuan. Karena itu, kamu tidak bisa tahu ke mana tautan akan membawa sebelum dibuka.',
   };
 };
