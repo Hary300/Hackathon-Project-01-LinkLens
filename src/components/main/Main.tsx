@@ -14,10 +14,10 @@ const Main = () => {
   const [isCheckingGoogle, setIsCheckingGoogle] = useState(false);
 
   // result state
+  const [localResult, setLocalResult] = useState<AnalyzeUrl | null>(null);
   const [googleResult, setGoogleResult] = useState<GoogleCheckResult | null>(
     null
   );
-  const [localResult, setLocalResult] = useState<AnalyzeUrl | null>(null);
   const [resultOrder, setResultOrder] = useState<CheckMode[]>([]);
 
   const handleCheckModeChange = (mode: CheckMode) => {
