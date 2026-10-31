@@ -80,8 +80,8 @@ const makeGoogleChecks = (
       indicator: 21,
       status: hasPhishing ? 'found' : 'clear',
       description: hasPhishing
-        ? 'Google mencocokkan URL ini dengan ancaman phishing atau rekayasa sosial.'
-        : 'Google tidak menemukan kecocokan phishing untuk URL ini.',
+        ? 'Tautan ini pernah ditandai karena digunakan untuk menipu orang agar memberikan informasi pribadi.'
+        : 'Belum ditemukan laporan bahwa tautan ini digunakan untuk mencuri informasi pribadi.',
       source: 'Google Safe Browsing',
     },
     // 22. URL terdeteksi mengandung malware
@@ -89,8 +89,8 @@ const makeGoogleChecks = (
       indicator: 22,
       status: hasMalware ? 'found' : 'clear',
       description: hasMalware
-        ? 'Google mencocokkan URL ini dengan ancaman malware.'
-        : 'Google tidak menemukan kecocokan malware untuk URL ini.',
+        ? 'Tautan ini pernah dikaitkan dengan program yang dapat merusak perangkat atau mengambil data.'
+        : 'Belum ditemukan laporan bahwa tautan ini membawa program yang merusak perangkat.',
       source: 'Google Safe Browsing',
     },
     // 23. Domain memiliki reputasi buruk
@@ -98,18 +98,18 @@ const makeGoogleChecks = (
       indicator: 23,
       status: hasReputationMatch ? 'found' : 'clear',
       description: hasReputationMatch
-        ? 'Google memiliki kecocokan ancaman untuk URL atau pola host/path terkait. Ini bukan skor reputasi menyeluruh untuk seluruh domain.'
-        : 'Google tidak menemukan kecocokan ancaman untuk URL ini. Ini bukan skor reputasi menyeluruh untuk domain.',
-      source: 'Kecocokan daftar ancaman Google Safe Browsing',
+        ? 'Ada laporan berbahaya yang cocok dengan alamat atau nama situs ini.'
+        : 'Belum ditemukan laporan berbahaya yang cocok dengan alamat atau nama situs ini.',
+      source: 'Google',
     },
     // 25. Domain atau URL pernah dilaporkan
     {
       indicator: 25,
       status: hasReport ? 'found' : 'clear',
       description: hasReport
-        ? 'URL atau pola URL terkait tercantum sebagai ancaman yang diketahui Google.'
-        : 'URL ini tidak ditemukan dalam daftar ancaman Google yang diperiksa.',
-      source: 'Daftar ancaman Google Safe Browsing',
+        ? 'Alamat ini pernah dilaporkan ke Google sebagai berbahaya.'
+        : 'Belum ditemukan laporan tentang alamat ini.',
+      source: 'Google',
     },
   ];
 };
@@ -131,8 +131,8 @@ const checkDomainAge = async (hostname: string): Promise<ReputationCheck> => {
       indicator: 24,
       status: 'unavailable',
       description:
-        'Usia domain tidak dapat diperiksa untuk hostname ini atau alamat IP.',
-      source: 'RDAP',
+        'Waktu pembuatan nama situs ini belum bisa diperiksa.',
+      source: 'Data pendaftaran nama situs',
     };
   }
 
@@ -151,10 +151,8 @@ const checkDomainAge = async (hostname: string): Promise<ReputationCheck> => {
         indicator: 24,
         status: 'unavailable',
         description:
-          response.status === 404
-            ? 'Data pendaftaran domain tidak ditemukan pada RDAP.'
-            : `Layanan RDAP tidak dapat memeriksa domain (HTTP ${response.status}).`,
-        source: 'RDAP',
+          'Informasi kapan nama situs dibuat belum bisa diperiksa.',
+        source: 'Data pendaftaran nama situs',
       };
     }
 
@@ -186,8 +184,8 @@ const checkDomainAge = async (hostname: string): Promise<ReputationCheck> => {
         indicator: 24,
         status: 'unavailable',
         description:
-          'Tanggal pendaftaran domain tidak tersedia pada data RDAP.',
-        source: 'RDAP',
+          'Informasi kapan nama situs dibuat belum tersedia.',
+        source: 'Data pendaftaran nama situs',
       };
     }
 
@@ -200,8 +198,8 @@ const checkDomainAge = async (hostname: string): Promise<ReputationCheck> => {
       return {
         indicator: 24,
         status: 'unavailable',
-        description: 'Tanggal pendaftaran domain dari RDAP tidak valid.',
-        source: 'RDAP',
+        description: 'Waktu pembuatan nama situs belum bisa dipastikan.',
+        source: 'Data pendaftaran nama situs',
       };
     }
 
@@ -210,9 +208,9 @@ const checkDomainAge = async (hostname: string): Promise<ReputationCheck> => {
       indicator: 24,
       status: isNewDomain ? 'found' : 'clear',
       description: isNewDomain
-        ? `Domain terdaftar sekitar ${ageInDays} hari yang lalu. Domain baru perlu diverifikasi lebih lanjut, tetapi usia muda bukan bukti penipuan.`
-        : `Domain terdaftar sekitar ${ageInDays} hari yang lalu (lebih dari 30 hari). Usia domain saja tidak membuktikan bahwa situs aman.`,
-      source: `RDAP (${domain})`,
+        ? `Nama situs ini dibuat sekitar ${ageInDays} hari yang lalu. Pastikan alamatnya diumumkan oleh layanan resmi sebelum dibuka atau diisi.`
+        : `Nama situs ini dibuat sekitar ${ageInDays} hari yang lalu. Pastikan alamat dan halaman yang dituju sesuai dengan layanan resmi.`,
+      source: 'Data pendaftaran nama situs',
     };
   } catch (error) {
     console.error(
@@ -223,8 +221,8 @@ const checkDomainAge = async (hostname: string): Promise<ReputationCheck> => {
       indicator: 24,
       status: 'unavailable',
       description:
-        'Tidak dapat terhubung ke layanan RDAP untuk memeriksa usia domain.',
-      source: 'RDAP',
+        'Informasi kapan nama situs dibuat belum bisa diperiksa. Coba lagi nanti.',
+      source: 'Data pendaftaran nama situs',
     };
   }
 };
@@ -259,7 +257,7 @@ export async function POST(request: Request) {
   if (!apiKey || !safeBrowsingApiUrl) {
     googleChecks = makeGoogleChecks(
       [],
-      'SAFE_BROWSING_API_KEY atau SAFE_BROWSING_API_URL belum dikonfigurasi.'
+      'Pemeriksaan tambahan belum tersedia. Coba lagi nanti.'
     );
   } else {
     let googleUrl: URL;
@@ -269,7 +267,7 @@ export async function POST(request: Request) {
         googleUrl.protocol !== 'https:' ||
         googleUrl.hostname !== 'safebrowsing.googleapis.com'
       ) {
-        throw new Error('Endpoint Safe Browsing harus memakai host Google HTTPS.');
+        throw new Error(        'Pengaturan pemeriksaan tidak sesuai.');
       }
     } catch (error) {
       console.error(
@@ -278,7 +276,7 @@ export async function POST(request: Request) {
       );
       googleChecks = makeGoogleChecks(
         [],
-        'SAFE_BROWSING_API_URL tidak valid.'
+        'Pemeriksaan tambahan belum tersedia. Coba lagi nanti.'
       );
       const domainAgeCheck = await checkDomainAge(hostname);
       return Response.json({
@@ -343,11 +341,11 @@ export async function POST(request: Request) {
       const message =
         error instanceof Error
           ? error.message.replaceAll(apiKey, '[REDACTED]')
-          : 'Tidak dapat menghubungi Google Safe Browsing.';
+            : 'Pemeriksaan tambahan belum bisa dilakukan.';
       console.error('Google Safe Browsing check failed:', message);
       googleChecks = makeGoogleChecks(
         [],
-        'Google Safe Browsing tidak dapat memeriksa URL ini.'
+        'Pemeriksaan tambahan belum bisa dilakukan. Coba lagi nanti.'
       );
     }
   }

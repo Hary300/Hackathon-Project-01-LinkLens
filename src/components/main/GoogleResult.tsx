@@ -40,22 +40,24 @@ const GoogleResult = ({ googleResult }: GoogleResultProps) => {
     googleResult.status === 'checking'
       ? 'Tunggu sampai pemeriksaan selesai sebelum memutuskan untuk membuka link.'
       : googleResult.status === 'error'
-        ? 'Coba periksa lagi nanti. Jangan anggap link aman selama pemeriksaan gagal.'
+        ? 'Pemeriksaan belum berhasil. Coba lagi nanti dan pastikan tautan berasal dari layanan resmi sebelum dibuka atau diisi.'
         : hasKnownThreat
-          ? 'Jangan buka link. Hapus pesan tersebut atau laporkan sebagai mencurigakan.'
-          : needsCaution
-            ? 'Jangan masukkan data sensitif. Verifikasi link melalui situs atau kanal resmi dan ulangi pemeriksaan jika ada sumber yang gagal.'
-            : 'Tidak ada ancaman yang ditemukan oleh sumber pemeriksaan ini. Tetap pastikan domain benar dan berhati-hati sebelum memasukkan data.';
+          ? 'Ada tanda bahwa tautan ini pernah digunakan untuk hal berbahaya. Jangan dibuka atau diisi; kunjungi layanan melalui alamat resminya.'
+          : hasNoChecks
+            ? 'Belum ada hasil yang bisa ditampilkan. Coba lagi nanti dan pastikan tautan berasal dari layanan resmi.'
+            : needsCaution
+              ? 'Ada hal yang perlu diperiksa lagi atau pemeriksaan belum selesai. Pastikan nama situs melalui layanan resmi dan coba ulangi pemeriksaan.'
+              : 'Belum ditemukan laporan tentang tautan ini. Cocokkan nama situs dengan alamat resmi sebelum masuk akun atau membayar.';
   const conclusionTitle =
     googleResult.status === 'checking'
-      ? 'Pemeriksaan sedang berlangsung'
+      ? 'Tautan sedang diperiksa'
       : googleResult.status === 'error'
-        ? 'Belum dapat disimpulkan'
+        ? 'Pemeriksaan belum berhasil'
         : hasKnownThreat
-          ? 'Ancaman terdeteksi'
+          ? 'Tautan perlu diwaspadai'
           : needsCaution
-            ? 'Hasil belum lengkap atau perlu diwaspadai'
-            : 'Tidak ada ancaman yang ditemukan';
+            ? 'Perlu pemeriksaan lebih lanjut'
+            : 'Belum ditemukan laporan';
   return (
     <section
       id='google-result'
@@ -74,7 +76,7 @@ const GoogleResult = ({ googleResult }: GoogleResultProps) => {
     >
       <div className='flex items-center gap-2'>
         <Search aria-hidden='true' className='size-5 shrink-0' />
-        <h2 className='font-semibold'>Pemeriksaan reputasi eksternal</h2>
+        <h2 className='font-semibold'>Hasil pemeriksaan Google</h2>
       </div>
 
       <div
@@ -119,14 +121,16 @@ const GoogleResult = ({ googleResult }: GoogleResultProps) => {
         <div className='space-y-3 border-t border-current/15 p-3'>
           <p className='text-sm'>
             {googleResult.status === 'checking'
-              ? 'Sedang memeriksa Google Safe Browsing dan data pendaftaran domain.'
+              ? 'Sedang memeriksa apakah tautan pernah dilaporkan dan kapan nama situs dibuat.'
               : googleResult.status === 'error'
-                ? googleResult.message
+                ? 'Pemeriksaan belum berhasil. Coba lagi nanti dan jangan isi data sebelum memastikan tautan melalui layanan resmi.'
                 : hasKnownThreat
-                  ? 'Satu atau lebih sumber menemukan indikator risiko. Hindari membuka link sampai diverifikasi.'
-                  : needsCaution
-                    ? 'Hasil pemeriksaan belum cukup untuk menyimpulkan bahwa link aman.'
-                    : 'Hasil “tidak ditemukan” bukan jaminan bahwa link aman.'}
+                  ? 'Tinjau temuan di bawah. Jangan masuk akun, mengunduh berkas, atau membayar melalui tautan ini.'
+                  : hasNoChecks
+                    ? 'Belum ada hasil yang bisa ditampilkan. Coba lagi nanti dan pastikan nama situs melalui layanan resmi.'
+                    : needsCaution
+                      ? 'Sebagian pemeriksaan belum memberi hasil atau ada hal yang perlu diperiksa. Lihat keterangan tiap pemeriksaan di bawah.'
+                      : 'Belum ditemukan laporan tentang tautan ini. Pastikan nama situs sama persis dengan alamat resmi dan halaman yang dibuka sesuai.'}
           </p>
           {googleResult.status === 'complete' && (
             <div className='space-y-2'>
@@ -138,8 +142,8 @@ const GoogleResult = ({ googleResult }: GoogleResultProps) => {
           {googleResult.status === 'complete' && (
             <p className='flex items-center gap-2 text-xs'>
               <SearchCheck aria-hidden='true' className='size-4 shrink-0' />
-              Hasil berasal dari Google Safe Browsing dan RDAP. Usia domain
-              bukan bukti keamanan atau penipuan.
+              Informasi ini berasal dari Google dan data pendaftaran nama situs.
+              Periksa alamat dan halaman tujuan sebelum mengisi data.
             </p>
           )}
         </div>

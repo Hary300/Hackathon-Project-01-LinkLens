@@ -8,8 +8,8 @@ export const checkExecutablePath = ({
   }
 
   return {
-    header: 'Path mengarah ke file yang dapat dijalankan',
+    header: 'Tautan mengarah ke berkas aplikasi',
     description:
-      'URL berakhir dengan ekstensi file aplikasi atau skrip. Ekstensi tidak membuktikan isi file, tetapi jangan unduh atau jalankan file dari sumber yang tidak dikenal.',
+      'Berkas aplikasi dapat mengubah perangkat saat dibuka. Unduh hanya dari situs resmi dan pastikan kamu mengenali pembuat berkasnya.',
   };
 };

@@ -12,8 +12,8 @@ export const checkPhishingTerms = ({
   }
 
   return {
-    header: 'Path atau query memuat kata yang sering digunakan dalam phishing',
+    header: 'Alamat mengarah ke halaman masuk atau pembayaran',
     description:
-      'Path atau parameter URL memuat kata seperti login, verify, password, account, atau payment. Kata ini juga digunakan situs resmi, jadi periksa sebagai sinyal tambahan saja.',
+      'Halaman ini mungkin meminta kata sandi, data akun, atau pembayaran. Pastikan nama situs benar-benar milik layanan yang kamu tuju sebelum mengisi apa pun.',
   };
 };

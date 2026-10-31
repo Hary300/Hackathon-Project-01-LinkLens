@@ -13,7 +13,7 @@ export const checkMisleadingBrandSubdomain = ({
   const [brand] = misleadingBrandDomain;
 
   return {
-    header: 'Nama domain resmi ditempel sebagai subdomain',
-    description: `Hostname memuat "${getKnownBrandDomain(brand)}" diikuti domain lain. Contohnya pola seperti "paypal.com.situs-lain.tld" tetap dimiliki domain setelahnya, bukan PayPal.`,
+    header: 'Nama layanan hanya muncul di bagian depan alamat',
+    description: `Alamat memuat "${getKnownBrandDomain(brand)}" di bagian depan, tetapi nama situs sebenarnya berada setelahnya. Pastikan nama situs paling akhir cocok dengan alamat resmi layanan tersebut.`,
   };
 };

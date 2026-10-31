@@ -7,8 +7,8 @@ export const checkIpHostname = ({
   if (!isIpv4 && !isIpv6) return null;
 
   return {
-    header: 'Hostname berupa alamat IP',
+    header: 'Alamat situs hanya berupa angka',
     description:
-      'Alamat IP langsung tidak menunjukkan nama organisasi. Pastikan tujuan link benar sebelum memasukkan data.',
+      'Alamat situs hanya berupa angka, jadi sulit mengetahui siapa pemiliknya. Pastikan tautan ini berasal dari layanan resmi sebelum dibuka atau diisi.',
   };
 };

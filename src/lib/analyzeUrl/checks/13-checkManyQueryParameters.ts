@@ -7,7 +7,7 @@ export const checkManyQueryParameters = ({
   if (queryParameterCount < 4) return null;
 
   return {
-    header: 'URL mengandung banyak parameter',
-    description: `URL memiliki ${queryParameterCount} parameter query. Banyak parameter juga umum pada situs yang sah; periksa sebagai sinyal tambahan, bukan bukti penipuan.`,
+    header: 'Alamat tautan memuat banyak informasi tambahan',
+    description: `Ada ${queryParameterCount} bagian informasi tambahan pada tautan ini. Informasi tersebut dapat menentukan halaman yang dibuka; pastikan tautan berasal dari pengirim tepercaya dan jangan bagikan jika berisi informasi akun.`,
   };
 };

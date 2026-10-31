@@ -7,7 +7,7 @@ export const checkAtSign = ({
   if (!/^https?:\/\/[^/?#]*@/i.test(parsedUrl.href)) return null;
 
   return {
-    header: 'URL menggunakan karakter @',
-    description: `Hostname tujuan sebenarnya adalah "${hostname}", bukan bagian sebelum tanda @. Periksa hostname ini sebelum membuka link.`,
+    header: 'Alamat memakai tanda @',
+    description: `Tanda @ dapat menyamarkan alamat situs yang sebenarnya. Tujuan tautan ini adalah "${hostname}". Pastikan nama situs tersebut sesuai dengan layanan resmi sebelum mengisi data.`,
   };
 };

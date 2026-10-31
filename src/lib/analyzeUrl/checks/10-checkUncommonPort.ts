@@ -6,7 +6,7 @@ export const checkUncommonPort = ({
   if (!parsedUrl.port || ['80', '443'].includes(parsedUrl.port)) return null;
 
   return {
-    header: 'URL menggunakan port yang tidak umum',
-    description: `URL menggunakan port :${parsedUrl.port}. Port ini bisa dipakai layanan yang sah, tetapi tidak umum untuk halaman publik; pastikan alamatnya benar sebelum memasukkan data.`,
+    header: 'Alamat memakai nomor tambahan yang tidak biasa',
+    description: `Alamat ini memakai nomor :${parsedUrl.port} yang tidak umum untuk situs biasa. Pastikan nomor ini diberikan oleh layanan resmi sebelum membuka halaman atau mengisi data.`,
   };
 };

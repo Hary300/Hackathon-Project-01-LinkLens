@@ -6,8 +6,8 @@ export const checkPunycode = ({
   if (!hostnameParts.some((part) => part.startsWith('xn--'))) return null;
 
   return {
-    header: 'Domain menggunakan Punycode',
+    header: 'Nama situs memakai huruf khusus',
     description:
-      'Punycode dapat mewakili karakter Unicode yang tampak mirip huruf biasa. Cocokkan nama domain dengan alamat resmi; Punycode sendiri bukan bukti penipuan.',
+      'Beberapa huruf pada nama situs bisa terlihat sama, padahal sebenarnya berbeda. Periksa nama situs dengan teliti dan cocokkan dengan alamat resmi sebelum masuk akun.',
   };
 };

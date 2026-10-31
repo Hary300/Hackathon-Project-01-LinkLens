@@ -6,8 +6,8 @@ export const checkHttpConnection = ({
   if (parsedUrl.protocol !== 'http:') return null;
 
   return {
-    header: 'Koneksi menggunakan HTTP, bukan HTTPS',
+    header: 'Koneksi ke situs ini tidak terlindungi',
     description:
-      'Koneksi HTTP tidak mengenkripsi data saat dikirim. Ini peringatan keamanan koneksi, bukan bukti bahwa situs tersebut penipuan. HTTPS juga tidak menjamin situs tepercaya.',
+      'Kata sandi atau informasi pembayaran yang dikirim lewat koneksi ini bisa dilihat orang lain. Jangan isi data apa pun; cari alamat resmi layanan dan buka dari sana.',
   };
 };
