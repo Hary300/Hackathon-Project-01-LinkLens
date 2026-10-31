@@ -1,6 +1,6 @@
 import { runUrlChecks } from './analyzeUrl/checks';
 import { getRegistrableDomainLabel } from './analyzeUrl/helpers';
-import { checkUnsupportedProtocol } from './analyzeUrl/checks/checkUnsupportedProtocol';
+import { checkUnsupportedProtocol } from './analyzeUrl/checks/11-checkUnsupportedProtocol';
 import type { AnalyzeUrl, UrlAnalysisContext } from './analyzeUrl/types';
 
 export type { AnalyzeUrl } from './analyzeUrl/types';
@@ -9,7 +9,7 @@ export const analyzeUrl = (url: string): AnalyzeUrl => {
   // Parse URL sekali agar seluruh pemeriksaan memakai hasil parsing yang sama.
   const parsedUrl = new URL(url);
 
-  // Tolak skema selain HTTP/HTTPS sebelum menjalankan pemeriksaan lainnya.
+  // 11. Tolak skema selain HTTP/HTTPS sebelum menjalankan pemeriksaan lainnya.
   const unsupportedProtocolCheck = checkUnsupportedProtocol(parsedUrl);
 
   if (unsupportedProtocolCheck) {
@@ -19,6 +19,7 @@ export const analyzeUrl = (url: string): AnalyzeUrl => {
   // Siapkan informasi hostname dan URL yang dipakai oleh fungsi-fungsi pemeriksaan.
   const hostname = parsedUrl.hostname.toLowerCase();
   const hostnameParts = hostname.split('.');
+
   // Bedakan alamat IP dari hostname domain agar aturan hostname bisa memilih kondisi yang tepat.
   const isIpv4 =
     hostnameParts.length === 4 &&
