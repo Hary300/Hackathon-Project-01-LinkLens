@@ -1,5 +1,6 @@
 import { ReputationCheck } from '@/lib/reputation';
 import { cn } from 'cn';
+import { AlertTriangle, ShieldCheck, XCircle } from 'lucide-react';
 
 const indicatorTitles: Record<ReputationCheck['indicator'], string> = {
   21: 'URL terdaftar sebagai phishing',
@@ -15,6 +16,14 @@ const ReputationCheckItem = ({ check }: { check: ReputationCheck }) => {
     clear: 'Tidak ditemukan',
     unavailable: 'Tidak dapat diperiksa',
   }[check.status];
+  const recommendation =
+    check.status === 'unavailable'
+      ? 'Coba periksa lagi nanti dan jangan anggap hasil ini sebagai tanda bahwa link aman.'
+      : check.status === 'found' && check.indicator === 24
+        ? 'Domain baru perlu diwaspadai. Verifikasi melalui kanal resmi sebelum membuka atau memasukkan data.'
+        : check.status === 'found'
+          ? 'Jangan buka link. Verifikasi alamat melalui situs atau kanal resmi.'
+          : 'Sumber ini tidak menemukan indikator tersebut. Tetap periksa domain sebelum memasukkan data sensitif.';
 
   return (
     <div
@@ -46,6 +55,28 @@ const ReputationCheckItem = ({ check }: { check: ReputationCheck }) => {
       </div>
       <p className='mt-1 text-sm'>{check.description}</p>
       <p className='mt-1 text-xs opacity-75'>Sumber: {check.source}</p>
+      <div className='mt-2 flex items-start gap-2 border-t border-slate-200 pt-2 text-xs'>
+        {check.status === 'clear' ? (
+          <ShieldCheck
+            aria-hidden='true'
+            className='mt-0.5 size-4 shrink-0 text-emerald-700'
+          />
+        ) : check.status === 'found' && check.indicator !== 24 ? (
+          <XCircle
+            aria-hidden='true'
+            className='mt-0.5 size-4 shrink-0 text-red-700'
+          />
+        ) : (
+          <AlertTriangle
+            aria-hidden='true'
+            className='mt-0.5 size-4 shrink-0 text-amber-700'
+          />
+        )}
+        <p>
+          <span className='font-semibold'>Langkah selanjutnya: </span>
+          {recommendation}
+        </p>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { AnalyzeUrl } from '@/lib/analyzeUrl';
 import { cn } from 'cn';
-import { AlertTriangle, ShieldCheck } from 'lucide-react';
+import { AlertTriangle, ChevronDown, Search, ShieldCheck } from 'lucide-react';
 
 interface LocalResultProps {
   localResult: AnalyzeUrl;
@@ -24,20 +24,50 @@ const LocalResult = ({ localResult }: LocalResultProps) => {
       )}
     >
       <div className='flex items-center gap-2'>
-        {isSuspicious ? (
-          <AlertTriangle aria-hidden='true' className='size-5 shrink-0' />
-        ) : (
-          <ShieldCheck aria-hidden='true' className='size-5 shrink-0' />
-        )}
+        <Search aria-hidden='true' className='size-5 shrink-0' />
         <h2 className='font-semibold'>Pemeriksaan lokal: struktur URL</h2>
       </div>
-      <p className='mt-2 text-sm'>
-        {isSuspicious
-          ? 'Ditemukan indikator pada bentuk alamat URL. Ini bukan konfirmasi bahwa situs berbahaya.'
-          : 'Tidak ditemukan indikator mencurigakan pada struktur URL. Ini bukan jaminan bahwa situs aman.'}
-      </p>
-      {checks.length > 0 && (
-        <div className='mt-3 space-y-3 text-sm'>
+      <div
+        className={cn(
+          'mt-3 flex items-start gap-3 rounded-xl border-2 bg-white p-4 shadow-sm',
+          isSuspicious ? 'border-amber-300' : 'border-emerald-300'
+        )}
+      >
+        {isSuspicious ? (
+          <AlertTriangle
+            aria-hidden='true'
+            className='mt-0.5 size-6 shrink-0'
+          />
+        ) : (
+          <ShieldCheck aria-hidden='true' className='mt-0.5 size-6 shrink-0' />
+        )}
+        <div>
+          <h3 className='text-lg font-bold'>
+            {isSuspicious
+              ? 'Perlu diwaspadai'
+              : 'Tidak ditemukan indikasi mencurigakan'}
+          </h3>
+          <p className='mt-1 text-sm font-medium'>
+            {isSuspicious
+              ? 'Jangan buka link dulu. Verifikasi alamat melalui situs atau kanal resmi.'
+              : 'Tetap periksa alamat situs dan jangan masukkan data sensitif jika ragu.'}
+          </p>
+        </div>
+      </div>
+      <details className='group mt-3 rounded-lg border border-current/15 bg-white/60 [interpolate-size:allow-keywords] details-content:h-0 details-content:overflow-clip details-content:transition-[height,content-visibility] details-content:transition-discrete details-content:duration-300 details-content:ease-in-out [&[open]::details-content]:h-auto'>
+        <summary className='flex cursor-pointer list-none items-center justify-between gap-2 p-3 text-sm font-semibold [&::-webkit-details-marker]:hidden'>
+          <span>Lihat detail pemeriksaan</span>
+          <ChevronDown
+            aria-hidden='true'
+            className='size-4 shrink-0 transition-transform duration-300 ease-in-out group-open:rotate-180'
+          />
+        </summary>
+        <div className='space-y-3 border-t border-current/15 p-3 text-sm'>
+          <p>
+            {isSuspicious
+              ? 'Ditemukan indikator pada bentuk alamat URL. Ini bukan konfirmasi bahwa situs berbahaya.'
+              : 'Tidak ditemukan indikator mencurigakan pada struktur URL. Ini bukan jaminan bahwa situs aman.'}
+          </p>
           {checks.map(({ header, description }) => (
             <div key={header}>
               <h3 className='font-semibold'>{header}</h3>
@@ -45,7 +75,7 @@ const LocalResult = ({ localResult }: LocalResultProps) => {
             </div>
           ))}
         </div>
-      )}
+      </details>
     </section>
   );
 };

@@ -55,12 +55,24 @@ const redirectParameterNames = new Set([
   'url',
 ]);
 
-// Mengambil label domain yang dapat dibandingkan dengan nama brand;
-// dipakai oleh pemeriksaan 8 melalui konteks analisis URL.
+// Mengambil nama domain utama untuk dibandingkan dengan nama brand
+// pada pemeriksaan 8. Bagian "shop" adalah subdomain, jadi yang dicari "example".
+// Contoh input: "shop.example.co.id".
 export const getRegistrableDomainLabel = (hostname: string) => {
   const labels = hostname.split('.');
+  // Pecah hostname berdasarkan titik:
+  // ["shop", "example", "co", "id"].
   const suffix = labels.slice(-2).join('.');
-  return labels[multiPartPublicSuffixes.has(suffix) ? -3 : -2] ?? labels[0];
+  // Ambil dua bagian paling kanan: "co.id".
+  // Karena "co.id" terdiri dari dua bagian, nama domain utama ada tiga posisi dari kanan: "example".
+  // Untuk "shop.example.com", nama domain utama ada di dua posisi dari kanan: "example".
+  const labelIndex = multiPartPublicSuffixes.has(suffix)
+    ? labels.length - 3
+    : labels.length - 2;
+
+  // Ambil bagian hostname pada posisi yang sudah dihitung. Jika tidak ada,
+  // gunakan bagian pertama agar fungsi tetap punya nilai untuk hostname pendek.
+  return labels[labelIndex] ?? labels[0];
 };
 
 // Mengubah beberapa karakter yang umum dipakai untuk meniru huruf brand;
