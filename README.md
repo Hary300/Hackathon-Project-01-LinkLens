@@ -32,6 +32,18 @@ Mengirim URL ke Google Safe Browsing untuk memeriksa kecocokan phishing/malware 
 - RDAP mungkin tidak menyediakan data untuk sebagian domain.
 - Saat memilih pemeriksaan eksternal, URL dikirim ke Google Safe Browsing dan domain yang didaftarkan ditanyakan ke RDAP.
 
+## Teknologi yang digunakan
+
+- **Next.js** — framework aplikasi dan API.
+- **React** dan **TypeScript** — antarmuka dan bahasa pemrograman.
+- **Tailwind CSS** — styling antarmuka.
+- **shadcn/ui** dan **Radix UI** — komponen antarmuka.
+- **Lucide React** — ikon.
+- **Zod** dan **React Hook Form** — validasi dan pengelolaan formulir.
+- **Google Safe Browsing API** — pemeriksaan URL terhadap daftar ancaman.
+- **IANA RDAP** — mencari layanan data pendaftaran nama situs.
+- **Vitest** dan **ESLint** — pengujian dan pemeriksaan kode.
+
 ## Persyaratan
 
 - Node.js dan npm.
